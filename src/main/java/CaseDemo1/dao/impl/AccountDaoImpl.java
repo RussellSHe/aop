@@ -2,6 +2,7 @@ package CaseDemo1.dao.impl;
 
 import CaseDemo1.dao.AccountDao;
 import CaseDemo1.domain.Account;
+import CaseDemo1.utils.ConnetionUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -26,11 +27,13 @@ import java.util.List;
 public class AccountDaoImpl implements AccountDao {
     @Autowired
     QueryRunner runner;
+    @Autowired
+    private ConnetionUtils connetionUtils;
 
     @Override
     public Account findAccountByName(String name) {
         try {
-            List<Account> list=runner.query("select * from account where name=?",new BeanListHandler<Account>(Account.class),name);
+            List<Account> list=runner.query(connetionUtils.getThreadConnection(),"select * from account where name=?",new BeanListHandler<Account>(Account.class),name);
             if(list==null||list.size()==0){
                 return null;
             }
@@ -50,7 +53,7 @@ public class AccountDaoImpl implements AccountDao {
 
     public List<Account> findAllAccount() {
         try {
-             return runner.query("select * from account",new BeanListHandler<Account>(Account.class));
+             return runner.query(connetionUtils.getThreadConnection(),"select * from account",new BeanListHandler<Account>(Account.class));
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -60,7 +63,7 @@ public class AccountDaoImpl implements AccountDao {
 
     public Account findAccountById(Integer id) {
         try {
-            return runner.query("select * from account where id=?",new BeanHandler<Account>(Account.class),id);
+            return runner.query(connetionUtils.getThreadConnection(),"select * from account where id=?",new BeanHandler<Account>(Account.class),id);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -69,7 +72,7 @@ public class AccountDaoImpl implements AccountDao {
 
     public void saveAccount(Account ac) {
         try {
-             runner.update("insert into account(name,money) values(?,?) ",ac.getName(),ac.getMoney());
+             runner.update(connetionUtils.getThreadConnection(),"insert into account(name,money) values(?,?) ",ac.getName(),ac.getMoney());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,7 +80,7 @@ public class AccountDaoImpl implements AccountDao {
 
     public void updateAccount(Account ac) {
         try {
-            runner.update("update account set name=?,money=?  where id=? ",ac.getName(),ac.getMoney(),ac.getId());
+            runner.update(connetionUtils.getThreadConnection(),"update account set name=?,money=?  where id=? ",ac.getName(),ac.getMoney(),ac.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,7 +88,7 @@ public class AccountDaoImpl implements AccountDao {
 
     public void deleteAccount(Integer id) {
         try {
-            runner.update("delete from account where id=? ",id);
+            runner.update(connetionUtils.getThreadConnection(),"delete from account where id=? ",id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
