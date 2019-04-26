@@ -30,7 +30,7 @@ public class ServiceTest {
 
     @Test
     public void transferTest(){
-        ac.transfer("wangyi","sansan",5f);
+        ac.transfer("wangwu","zhaoliu",5f);
     }
 
     @Test
