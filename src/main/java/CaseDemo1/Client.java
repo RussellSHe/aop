@@ -4,7 +4,9 @@ import CaseDemo1.config.JdbcConfig;
 import CaseDemo1.config.SpringConfig;
 import CaseDemo1.domain.Account;
 import CaseDemo1.service.AccountService;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
@@ -17,10 +19,10 @@ public class Client {
 
    public static void main(String[] args) {
       //ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-      AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-      AccountService ac = (AccountService) context.getBean("accountService");
-      List<Account> allAccount = ac.findAllAccount();
-      allAccount.forEach(System.out::println);
+     AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+      AccountService ac = (AccountService) context.getBean("proxyAccountService");
+       List<Account> allAccount = ac.findAllAccount();
+       allAccount.forEach(System.out::println);
 
       /*Account accountById = ac.findAccountById(3);
       System.out.println(accountById);*/

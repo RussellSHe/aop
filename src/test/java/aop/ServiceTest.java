@@ -3,13 +3,16 @@ package aop;
 import CaseDemo1.config.SpringConfig;
 import CaseDemo1.dao.AccountDao;
 import CaseDemo1.domain.Account;
+import CaseDemo1.factory.BeanFactory;
 import CaseDemo1.service.AccountService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -26,11 +29,12 @@ import java.util.List;
 @ContextConfiguration(classes = SpringConfig.class)
 public class ServiceTest {
     @Autowired
+    //@Qualifier("proxyAccountService")
     private AccountService ac;
 
     @Test
     public void transferTest(){
-        ac.transfer("wangwu","zhaoliu",5f);
+        ac.transfer("sansan","wangyi",5f);
     }
 
     @Test

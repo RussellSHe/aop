@@ -20,9 +20,14 @@ import java.sql.SQLException;
 @Component("connectionUtils")
 public class ConnetionUtils {
     //使用Threadlocal对象把当前线程和Connection绑定，使一个线程中只有一个控制事务的对象
+
     private ThreadLocal<Connection> tl=new ThreadLocal<>();
     @Autowired
     private DataSource ds;
+
+    public void setDs(DataSource ds) {
+        this.ds = ds;
+    }
 
     public Connection getThreadConnection(){
         //先从当前线程上获取

@@ -1,6 +1,7 @@
 package CaseDemo1.config;
 
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
@@ -12,5 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan("CaseDemo1")
 @Import(JdbcConfig.class)
 @PropertySource("classpath:jdbcConfig.properties")
+@EnableAspectJAutoProxy
 public class SpringConfig {
 }

@@ -7,26 +7,40 @@
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-<!--<bean id="AccountService" class="IocDemo.Service.impl.AccountServiceImpl"/>
-<bean id="AccountDao" class="IocDemo.Dao.impl.AccountDaoImpl"/>-->
+    <!--<bean id="AccountService" class="IocDemo.Service.impl.AccountServiceImpl"/>
+    <bean id="AccountDao" class="IocDemo.Dao.impl.AccountDaoImpl"/>-->
 
-    <!--<context:component-scan base-package="AnnotationDemo"/>-->
-<!--    <bean id="InsatanceFactory" class="IocDemo.factory.InsatanceFactory"/>-->
-<!--    <bean id="AccountService" factory-bean="InsatanceFactory" factory-method="getAccountService"/>-->
-    <!--配置service-->
-    <!--<bean id="accountService" class="CaseDemo1.service.impl.AccountServiceImpl">
+   <!-- <context:component-scan base-package="CaseDemo1"/>
+    &lt;!&ndash; 开启AOP注解支持&ndash;&gt;
+    <aop:aspectj-autoproxy/>
+    &lt;!&ndash; 配置BeanFactory&ndash;&gt;
+    <bean id="factory" class="CaseDemo1.factory.BeanFactory">
+        <property name="accountService" ref="accountService"/>
+        <property name="txmanager" ref="txmanager"/>
+    </bean>
+    <bean id="txmanager" class="CaseDemo1.utils.TransactionManager">
+            <property name="connetionUtils" ref="connectionUtils"/>
+    </bean>
+    &lt;!&ndash;accountService代理类  静态工厂&ndash;&gt;
+    <bean id="proxyAccountService" factory-bean="factory" factory-method="getProxyAccountService"/>
+    &lt;!&ndash; 配置Service&ndash;&gt;
+    <bean id="accountService" class="CaseDemo1.service.impl.AccountServiceImpl">
         &lt;!&ndash; 注入DAO&ndash;&gt;
         <property name="accountDao" ref="accountDao"/>
-            </bean>
+    </bean>
     &lt;!&ndash;配置dao&ndash;&gt;
-    <bean id="accountDao" class="CaseDemo1.dao.impl.AccountDaoImpl" >
+    <bean id="accountDao" class="CaseDemo1.dao.impl.AccountDaoImpl">
         &lt;!&ndash;注入QueryRunner&ndash;&gt;
         <property name="runner" ref="runner"/>
+        <property name="connetionUtils" ref="connectionUtils"/>
     </bean>
-<bean id="runner" class="org.apache.commons.dbutils.QueryRunner" scope="prototype">
-    &lt;!&ndash; 注入数据源&ndash;&gt;
-    <constructor-arg name="ds" ref="dataSource" />
-</bean>
+    <bean id="connectionUtils" class="CaseDemo1.utils.ConnetionUtils">
+        <property name="ds" ref="dataSource"/>
+    </bean>
+    <bean id="runner" class="org.apache.commons.dbutils.QueryRunner" scope="prototype">
+        &lt;!&ndash; 注入数据源&ndash;&gt;
+        <constructor-arg name="ds" ref="dataSource"/>
+    </bean>
     &lt;!&ndash; 配置数据源&ndash;&gt;
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         &lt;!&ndash; 连接数据库配置信息&ndash;&gt;

@@ -4,7 +4,9 @@ import CaseDemo1.dao.AccountDao;
 import CaseDemo1.domain.Account;
 import CaseDemo1.service.AccountService;
 import CaseDemo1.utils.TransactionManager;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +25,10 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountDao ac;
-    @Autowired
-    public TransactionManager txmanager;
+
+    public void setAc(AccountDao ac) {
+        this.ac = ac;
+    }
 
     public void setAccountDao(AccountDao ac) {
         this.ac = ac;
@@ -32,135 +36,40 @@ public class AccountServiceImpl implements AccountService {
 
     public List<Account> findAllAccount() {
 
-        try {
-            //开启事务
-            txmanager.beginTransaction();
-            //执行操作
-            List<Account> allAccount = ac.findAllAccount();
-            //提交事务
-            txmanager.commit();
-            //返回结果
-            return allAccount;
-        } catch (Exception e) {
-            //回滚操作
-            txmanager.rollBack();
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            //关闭事务 释放连接
-            txmanager.closeTransaction();
-        }
+        return  ac.findAllAccount();
     }
 
     public Account findAccountById(Integer id) {
 
-        try {
-            //开启事务
-            txmanager.beginTransaction();
-            //执行操作
-            Account account = ac.findAccountById(id);
-            //提交事务
-            txmanager.commit();
-            //返回结果
-            return account;
-        } catch (Exception e) {
-            //回滚操作
-            txmanager.rollBack();
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            //关闭事务
-            txmanager.closeTransaction();
-        }
+      return ac.findAccountById(id);
     }
 
     public void saveAccount(Account acc) {
 
-        try {
-            //开启事务
-            txmanager.beginTransaction();
-            //执行操作
-            ac.saveAccount(acc);
-            //提交事务
-            txmanager.commit();
-            //返回结果
-
-        } catch (Exception e) {
-            //回滚操作
-            txmanager.rollBack();
-            e.printStackTrace();
-        } finally {
-            //关闭事务
-            txmanager.closeTransaction();
-        }
+        ac.saveAccount(acc);
     }
 
     public void updateAccount(Account acc) {
 
-        try {
-            //开启事务
-            txmanager.beginTransaction();
-            //执行操作
-            ac.updateAccount(acc);
-            //提交事务
-            txmanager.commit();
-            //返回结果
-
-        } catch (Exception e) {
-            //回滚操作
-            txmanager.rollBack();
-            e.printStackTrace();
-        } finally {
-            //关闭事务
-            txmanager.closeTransaction();
-        }
+       ac.saveAccount(acc);
     }
 
     public void deleteAccount(Integer id) {
-        try {
-            //开启事务
-            txmanager.beginTransaction();
-            //执行操作
-            ac.deleteAccount(id);
-            //提交事务
-            txmanager.commit();
-            //返回结果
-
-        } catch (Exception e) {
-            //回滚操作
-            txmanager.rollBack();
-            e.printStackTrace();
-        } finally {
-            //关闭事务
-            txmanager.closeTransaction();
-        }
+       ac.deleteAccount(id);
 
     }
 
     @Override
     public void transfer(String src, String dst, Float money) {
-        try {
-            //开启事务
-            txmanager.beginTransaction();
+
             //执行操作
             Account srcAcconut = ac.findAccountByName(src);
             Account dstAcconut = ac.findAccountByName(dst);
             srcAcconut.setMoney(srcAcconut.getMoney()-money);
             dstAcconut.setMoney(dstAcconut.getMoney()+money);
             ac.updateAccount(srcAcconut);
+            int i=1/0;
             ac.updateAccount(dstAcconut);
-            //提交事务
-            txmanager.commit();
-            //返回结果
-
-        } catch (Exception e) {
-            //回滚操作
-            txmanager.rollBack();
-            e.printStackTrace();
-        } finally {
-            //关闭事务
-            txmanager.closeTransaction();
-        }
 
 
     }

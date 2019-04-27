@@ -30,6 +30,10 @@ public class AccountDaoImpl implements AccountDao {
     @Autowired
     private ConnetionUtils connetionUtils;
 
+    public void setConnetionUtils(ConnetionUtils connetionUtils) {
+        this.connetionUtils = connetionUtils;
+    }
+
     @Override
     public Account findAccountByName(String name) {
         try {
